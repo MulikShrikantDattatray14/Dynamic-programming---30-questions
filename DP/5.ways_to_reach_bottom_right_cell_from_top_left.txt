@@ -1,0 +1,32 @@
+function numberOfWays(matrix) {
+  const rows = matrix.length;
+  const cols = matrix[0].length;
+
+  // Create a 2D array to store the number of ways to reach each cell
+  const dp = new Array(rows).fill(0).map(() => new Array(cols).fill(0));
+
+  // There is only one way to reach any cell in the first row or first column
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
+      if (i === 0 || j === 0) {
+        dp[i][j] = 1;
+      } else {
+        // The number of ways to reach a cell is the sum of the number of ways to reach
+        // the cell above it and the cell to the left of it.
+        dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+      }
+    }
+  }
+
+  // The bottom-right cell contains the total number of ways to reach the destination
+  return dp[rows - 1][cols - 1];
+}
+
+// Example usage:
+const matrix = [
+  [1, 1, 1],
+  [1, 1, 1],
+  [1, 1, 1],
+];
+
+console.log(numberOfWays(matrix)); // Output: 6

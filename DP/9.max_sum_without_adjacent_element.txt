@@ -1,0 +1,124 @@
+Problem Description
+Given a 2 x N grid of integers, A, your task is to choose numbers from the grid such that sum of these numbers is maximized. 
+However, you cannot choose two numbers that are adjacent horizontally, vertically, or diagonally. 
+
+Return the maximum possible sum.
+
+Note: You are allowed to choose more than 2 numbers from the grid.
+
+
+Problem Constraints
+1 <= N <= 20000
+1 <= A[i] <= 2000
+
+
+Input Format
+The first and the only argument of input contains a 2d matrix, A.
+
+
+Output Format
+Return an integer, representing the maximum possible sum.
+
+
+Example Input
+Input 1:
+
+ A = [   
+        [1]
+        [2]    
+     ]
+Input 2:
+
+ A = [   
+        [1, 2, 3, 4]
+        [2, 3, 4, 5]    
+     ]
+
+
+Example Output
+Output 1:
+
+ 2
+Output 2:
+
+ 8
+
+
+Example Explanation
+Explanation 1:
+
+ We will choose 2 (From 2nd row 1st column).
+Explanation 2:
+
+ We will choose 3 (From 2nd row 2nd column) and 5 (From 2nd row 4th column).
+
+
+
+
+
+=====================================================================================
+// convert 2D matrix into 1d matrix and now on 1d matrix,do same as done in question -8: 
+-------------------------------------------------------------------------------------
+function maxSumNonAdjacent(grid) {
+    const n = grid[0].length;
+    const choice = new Array(n);
+    // convert the 2Darray into 1-D array,by taking maximum of the both array and combining it into one array(1D)
+    for (let i = 0; i < n; i++) {
+        choice[i] = Math.max(grid[0][i], grid[1][i]);
+    }
+    return choice;
+}
+
+// Example usage
+const grid1 = [[1], [2]];
+const grid2 = [
+    [1, 2, 3, 4],
+    [2, 3, 4, 5],
+];
+
+let arr1 = maxSumNonAdjacent(grid1); // Output: 2
+let arr2 = maxSumNonAdjacent(grid2); // Output: 8
+
+function maxSubsequenceSum(arr) {
+    if (arr.length === 0) return 0;
+    if (arr.length === 1) return arr[0];
+
+    //Initialize dp array to store maximum subsequence sum
+    const dp = new Array(arr.length).fill(0);
+
+    // Base cases
+    dp[0] = Math.max(0, arr[0]);
+    dp[1] = Math.max(dp[0], arr[1]);
+
+    // Dynamic programming approach to find the maximum subsequence sum
+    for (let i = 2; i < arr.length; i++) {
+        //  dp[i] stores the maximum sum of a subsequence that ends at the i-th element of the array.
+        // if you choose current element , you cant choose arr[i-1]th element , so dp[i-2]+arr[i]
+        // if you are not choosing the current element , so you can choose the previous element
+        dp[i] = Math.max(dp[i - 1], dp[i - 2] + arr[i], arr[i]);
+    }
+
+    return dp[arr.length - 1];
+}
+//Certainly! Let's break down the line dp[i] = Math.max(dp[i - 1], dp[i - 2] + arr[i], arr[i]);:
+
+// dp[i]: This represents the maximum subsequence sum ending at index i. In other words, dp[i] stores the maximum sum of a subsequence that ends at the i-th element of the array.
+
+// Math.max(): This is a JavaScript function that returns the maximum of the values passed to it.
+
+// dp[i - 1]: This represents the maximum subsequence sum ending at the previous element, i.e., the (i - 1)-th element of the array.
+
+// dp[i - 2] + arr[i]: This represents the maximum subsequence sum ending two elements before, plus the current element arr[i]. Since the problem specifies that two adjacent elements cannot be included in the subsequence, we need to skip the (i - 1)-th element, hence we add the sum of dp[i - 2] with the current element arr[i].
+
+// arr[i]: This represents the current element. This is included in the calculation because if adding the current element alone produces a larger sum than the previous two elements, it might be beneficial to start a new subsequence from this element.
+
+// Overall, this line of code updates dp[i] with the maximum subsequence sum ending at index i, considering two possibilities: either including the current element arr[i], or starting a new subsequence from the current element.
+
+// Example usage
+
+console.log("Maximum subsequence sum:", maxSubsequenceSum(arr1)); // Output: 35
+console.log("Maximum subsequence sum:", maxSubsequenceSum(arr2)); // Output: 35
+
+
+
+---------------------------------------------------------------------------------------------------------

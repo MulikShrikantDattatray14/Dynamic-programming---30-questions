@@ -1,0 +1,146 @@
+Problem Description :
+
+Given two strings A and B, find the minimum number of steps required to convert A to B. (each operation is counted as 1 step.)
+
+You have the following 3 operations permitted on a word:
+
+Insert a character
+Delete a character
+Replace a character
+
+
+Problem Constraints :
+1 <= length(A), length(B) <= 450
+
+
+
+Input Format :
+The first argument of input contains a string, A.
+The second argument of input contains a string, B.
+
+
+
+Output Format :
+Return an integer, representing the minimum number of steps required.
+
+
+
+Example Input
+Input 1:
+
+ A = "abad"
+ B = "abac"
+Input 2:
+
+ A = "Anshuman"
+ B = "Antihuman
+
+
+Example Output :
+Output 1:
+
+ 1
+Output 2:
+
+ 2
+
+
+Example Explanation
+Exlanation 1:
+
+ A = "abad" and B = "abac"
+ After applying operation: Replace d with c. We get A = B.
+ 
+Explanation 2:
+
+ A = "Anshuman" and B = "Antihuman"
+ After applying operations: Replace s with t and insert i before h. We get A = B.
+
+ ====================================================================================================================================================================================
+
+
+let A = "Anshuman";
+let B = "Antihuman";
+
+let ans = minDistance(A, B);
+console.log(ans);
+
+function minDistance(A, B) {
+    const l1 = A.length;
+    const l2 = B.length;
+    const dp = new Array(l1 + 1);
+    for (let i = 0; i <= l1; i++) {
+        dp[i] = new Array(l2 + 1).fill(-1);
+    }
+
+    return LCS(A, B, l1, l2, dp);
+}
+
+function LCS(s1, s2, l1, l2, dp) {
+    if (dp[l1][l2] !== -1) {
+        return dp[l1][l2];
+    }
+    if (l1 === 0) return l2; // insert x elements into the s1.
+    if (l2 === 0) return l1; // delete x elements from the s1.
+
+    if (s1.charAt(l1 - 1) === s2.charAt(l2 - 1)) {// decrease the size of both the strings- s1 and s2
+        dp[l1][l2] = LCS(s1, s2, l1 - 1, l2 - 1, dp);
+        return dp[l1][l2];
+    } else {
+        const del = LCS(s1, s2, l1 - 1, l2, dp); // delete- delete from s1 and not from s2.
+        const ins = LCS(s1, s2, l1, l2 - 1, dp); // insert- insert at end of s1,so last element of both gets matched ., thus l1 remains same and l2 gets decreased by 1 .
+        const replace = LCS(s1, s2, l1 - 1, l2 - 1, dp);
+        dp[l1][l2] = Math.min(del, ins, replace) + 1;
+        return dp[l1][l2];
+    }
+}
+
+
+======================================================================================================================================================================================
+
+
+//In this modified code:
+
+///We adjust the cost of each operation according to the problem constraints.Insertion and deletion cost 2 steps each, while replacement costs 3 steps.
+//-----------------------------------------------------------------------------------------
+
+function minStepsToConvert(A, B) {
+    const l1 = A.length;
+    const l2 = B.length;
+    const dp = new Array(l1 + 1);
+    for (let i = 0; i <= l1; i++) {
+        dp[i] = new Array(l2 + 1).fill(-1);
+    }
+    return minSteps(A, B, l1, l2, dp);
+}
+
+function minSteps(s1, s2, l1, l2, dp) {
+    if (dp[l1][l2] !== -1) {
+        return dp[l1][l2];
+    }
+    if (l1 === 0) return l2 * 2; // insert x characters, each costing 2 steps
+    if (l2 === 0) return l1 * 2; // delete x characters, each costing 2 steps
+
+    if (s1.charAt(l1 - 1) === s2.charAt(l2 - 1)) {
+        dp[l1][l2] = minSteps(s1, s2, l1 - 1, l2 - 1, dp);
+        return dp[l1][l2];
+    } else {
+        const del = minSteps(s1, s2, l1 - 1, l2, dp); // delete
+        const ins = minSteps(s1, s2, l1, l2 - 1, dp); // insert
+        const rep = minSteps(s1, s2, l1 - 1, l2 - 1, dp); // replace
+        dp[l1][l2] = Math.min(del + 2, ins + 2, rep + 3); // Counting steps as per the problem statement
+        return dp[l1][l2];
+    }
+}
+
+// Example usage:
+const A1 = "abad";
+const B1 = "abac";
+const A2 = "Anshuman";
+const B2 = "Antihuman";
+
+console.log(minStepsToConvert(A1, B1)); // Output: 1
+console.log(minStepsToConvert(A2, B2)); // Output: 2
+
+
+=====================================================================================================================================================================================

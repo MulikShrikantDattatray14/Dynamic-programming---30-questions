@@ -1,0 +1,84 @@
+Problem Description:-
+
+Given a string A. Find the longest palindromic subsequence (A subsequence which does not need to be contiguous and is a palindrome).
+
+You need to return the length of longest palindromic subsequence.
+
+
+
+Problem Constraints
+1 <= length of(A) <= 103
+
+
+
+Input Format
+First and only integer is a string A.
+
+
+
+Output Format
+Return an integer denoting the length of longest palindromic subsequence.
+
+
+
+Example Input
+Input 1:
+
+ A = "bebeeed"
+Input 2:
+
+ A = "aedsead"
+
+
+Example Output
+Output 1:
+
+ 4
+Output 2:
+
+ 5
+
+
+Example Explanation
+Explanation 1:
+
+ The longest palindromic subsequence is "eeee", which has a length of 4.
+Explanation 2:
+
+ The longest palindromic subsequence is "aedea", which has a length of 5.
+
+ ====================================================================================================================================================================================
+
+
+function solve(A) {
+    B = A.split("").reverse().join("");
+    let ans = solve(A, B);
+    return ans;
+
+    function solve(text1, text2) {
+        if (text1 == "" || text2 == "") return 0;
+
+        let dp = new Array(text2.length + 1)
+            .fill(0)
+            .map(() => new Array(text1.length + 1));
+        for (let row = 0; row < dp.length; row++) {
+            for (let col = 0; col < dp[0].length; col++) {
+                if (row == 0 || col == 0) {
+                    dp[row][col] = 0; // can't have a common subsequence with ""
+                } else if (text1[col - 1] === text2[row - 1]) {
+                    // we are comparing from backwards , +1 means take the count into consideration
+                    dp[row][col] = dp[row - 1][col - 1] + 1;
+                } else {
+                    dp[row][col] = Math.max(dp[row][col - 1], dp[row - 1][col]);
+                }
+            }
+        }
+        return dp[text2.length][text1.length];
+    }
+}
+let A = "bebeeed";
+let ans = solve(A);
+console.log(ans);
+
+
+=====================================================================================================================================================================================

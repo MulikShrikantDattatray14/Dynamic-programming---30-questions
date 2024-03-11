@@ -1,0 +1,32 @@
+function maxProfit(A, n) {
+  let sz = A.length;
+  // If the number of transactions allowed is more than half of the array size,
+  // we can maximize the profit by simply buying at each local minimum and selling at each local maximum.
+  if (n >= sz / 2) {
+    let totalProfit = 0;
+    for (let i = 1; i < sz; i++) {
+      if (A[i] > A[i - 1]) {
+        totalProfit += A[i] - A[i - 1];
+      }
+    }
+    return totalProfit;
+  }
+
+  // Otherwise, we use dynamic programming to keep track of maximum profit with 'n' transactions.
+  let dp = new Array(n + 1).fill().map(() => new Array(sz).fill(0));
+  // dp state - maximum profit till that cell
+  for (let t = 1; t <= n; t++) {
+    let maxProfitPrev = -A[0]; // Initialize the maximum profit if the first transaction is a buy
+    for (let i = 1; i < sz; i++) {
+      dp[t][i] = Math.max(dp[t][i - 1], A[i] + maxProfitPrev);
+      maxProfitPrev = Math.max(maxProfitPrev, dp[t - 1][i] - A[i]);
+    }
+  }
+  //console.log(dp);
+  return dp[n][sz - 1]; // Return the maximum profit achievable with 'n' transactions
+}
+
+let A = [5, 2, 10, 8, 1, 9]; //16
+let n = 2; // Number of transactions allowed
+let ans = maxProfit(A, n);
+console.log(ans); // Output will be the maximum profit with 'n' transactions allowed

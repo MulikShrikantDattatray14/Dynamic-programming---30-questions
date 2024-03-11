@@ -1,0 +1,89 @@
+Problem Description
+Given a string A, partition A such that every substring of the partition is a palindrome.
+
+Return the minimum cuts needed for a palindrome partitioning of A.
+
+
+
+Problem Constraints
+1 <= length(A) <= 501
+
+
+
+Input Format
+The first and the only argument contains the string A.
+
+
+
+Output Format
+Return an integer, representing the minimum cuts needed.
+
+
+
+Example Input
+Input 1:
+
+ A = "aba"
+Input 2:
+
+ A = "aab"
+
+
+Example Output
+Output 1:
+
+ 0
+Output 2:
+
+ 1
+
+
+Example Explanation
+Explanation 1:
+
+ "aba" is already a palindrome, so no cuts are needed.
+Explanation 2:
+
+ Return 1 since the palindrome partitioning ["aa","b"] could be produced using 1 cut.
+
+
+=========================================================================================================
+
+A = "abba"
+
+//https://www.youtube.com/watch?v=Oi6a4O00n4U
+
+const result = minCutPalindrome(A);
+console.log(result);
+
+function minCutPalindrome(s) {
+    const n = s.length;
+    const dp = new Array(n).fill().map(() => new Array(n).fill(0));
+    // fill the dp matrix diagonally downwards
+    for (let gap = 1; gap < n; gap++) {
+        for (let row = 0, col = gap; row < n - gap; row++, col++) {
+
+            if (isPalindrome(s, row, col)) {
+                dp[row][col] = 0;
+            } else {
+                dp[row][col] = Number.MAX_SAFE_INTEGER;
+                for (let k = row; k < col; k++) {// k does the partitioning
+                    dp[row][col] = Math.min(dp[row][col], 1 + dp[row][k] + dp[k + 1][col]);
+                }
+            }
+        }
+    }
+    return dp[0][n - 1];///0th row , last column
+}
+
+function isPalindrome(s, i, j) {
+    while (i < j) {
+        if (s[i++] !== s[j--]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+========================================================================================
