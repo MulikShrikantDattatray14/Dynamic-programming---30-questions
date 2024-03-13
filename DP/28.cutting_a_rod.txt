@@ -45,6 +45,8 @@ Explanation 2:
 
 ================================================================================================================================================================================================================================
 
+
+
 let A = [3, 4, 1, 6, 2]
 let ans = solve(A)
 console.log(ans)
@@ -56,14 +58,26 @@ function solve(A) {
     return (result);
 
     function maxProfit(prices, n) {
-        const dp = new Array(n + 1).fill(0);
+        const dp = new Array(n + 1).fill(0);//store the maximum profit obtainable for rods of different lengths.
         for (let i = 1; i <= n; i++) {
             for (let j = 0; j < i; j++) {
                 dp[i] = Math.max(dp[i], prices[j] + dp[i - j - 1]);
             }
         }
-        return dp[n];
+        return dp[n];//returns the maximum value that can be obtained by cutting up the rod and selling the pieces.
     }
 }
+
+//It iterates from length 1 to n, inclusive.For each length i, it calculates the maximum profit obtainable by considering all possible cuts.
+
+//Inside the inner loop, it iterates from 0 to i - 1, inclusive, considering all possible cuts of length j.
+
+//For each cut length j, it calculates the profit obtainable by selling the cut piece at price prices[j] and adding it to the maximum profit obtainable from the remaining rod of length i - j - 1, which is stored in dp[i - j - 1].
+
+//It updates the maximum profit for rod of length i in the dp array.
+
+//Finally, it returns the maximum profit obtainable for the rod of length n, which is stored in dp[n].
+
+//So, the code efficiently calculates the maximum value that can be obtained by cutting up the rod and selling the pieces using dynamic programming.
 
 ================================================================================================================================================================================================================================
